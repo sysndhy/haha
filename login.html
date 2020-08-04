@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>登录</title>
+  <link rel="stylesheet" href="./css/login.css">
+  <script src="./lib/jquery-1.12.2.js"></script>
+
+</head>
+
+<body>
+  <div class="wraper">
+    <div class="container">
+      <div class="logo">
+        <img class="icon" src="./images/logo.png" />
+        <div class="title">英雄管理系统</div>
+      </div>
+      <div class="input-container">
+        <div class="phone">
+          <img class="icon" src="./images/phone.png" />
+          <input placeholder="用户名" type="text" id="userName" name="userName" />
+        </div>
+        <div class="validate">
+          <div class="code">
+            <img class="icon" src="./images/mail.png" />
+            <input placeholder="密码" type="password" id="userPwd" name="userPwd" />
+          </div>
+        </div>
+      </div>
+      <div id="tips"></div>
+      <input type="submit" class="btn" value="登录" onclick="login()">
+    </div>
+  </div>
+
+  <script>
+    function login() {
+      const username = $('#userName').val();
+      const password = $('#userPwd').val();
+      $.post('http://127.0.0.1:3001/login', {
+        username,
+        password
+      }, (data) => {
+        if (data.code === 200) {
+          $('#tips').text(data.msg);
+          window.location.href = './index.html';
+
+          window.localStorage.setItem('token', data.token);
+
+
+        } else {
+          $('#tips').text(data.msg);
+
+        }
+      })
+    }
+  </script>
+</body>
+
+</html>

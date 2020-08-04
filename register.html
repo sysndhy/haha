@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>注册</title>
+  <link rel="stylesheet" href="./css/login.css">
+  <script src="./lib/jquery-1.12.2.js"></script>
+
+</head>
+
+<body>
+  <div class="wraper">
+    <div class="container">
+      <div class="logo">
+        <img class="icon" src="./images/logo.png" />
+        <div class="title">英雄管理系统</div>
+      </div>
+      <div class="input-container">
+        <div class="phone">
+          <img class="icon" src="./images/phone.png" />
+          <input placeholder="用户名" type="text" id="userName" name="userName" />
+        </div>
+        <div class="validate">
+          <div class="code">
+            <img class="icon" src="./images/mail.png" />
+            <input placeholder="密码" type="password" id="userPwd" name="userPwd" />
+          </div>
+        </div>
+      </div>
+      <div id="tips"></div>
+      <input type="submit" class="btn" value="注册" onclick="register()">
+    </div>
+  </div>
+
+  <script>
+    //注册
+    function register() {
+      const username = $('#userName').val();
+      const password = $('#userPwd').val();
+      if (username && password) {
+        $.post('http://127.0.0.1:3001/register', {
+          username,
+          password
+        }, (res) => {
+          if (res.code === 200) {
+            $('#tips').text(res.msg);
+            window.location.href = './index.html'
+          }
+        })
+      } else {
+        $('#tips').text("请输入用户民和密码")
+      }
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,86 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Hero - Admin</title>
+    <link rel="stylesheet" href="./css/bootstrap.css">
+    <script src="./lib/jquery-1.12.2.js"></script>
+</head>
+
+<body>
+    <header>
+        <div class="page-header container">
+            <h1>王者荣耀 <small>英雄管理器</small></h1>
+        </div>
+    </header>
+    <div class="container hero-list">
+        <form id='myform'>
+            <table class="table table-hover">
+                <tbody>
+                    <tr>
+                        <td>姓名：</td>
+                        <td><input type="text" name="name"></td>
+                    </tr>
+                    <tr>
+                        <td>性别：</td>
+                        <td>
+                            <input id="man" name="gender" value="男" type="radio" checked>
+                            <label for="man">男</label>
+                            <input name="gender" value="女" type="radio" id="female">
+                            <label for="female ">女</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>头像：</td>
+                        <td>
+                            <img src="/images/default.png" alt="" id="photo" width="100"
+                                style='border:1px solid #ccc;margin-bottom: 5px;'>
+                            <input type="file" id="img" onchange="uploadImg()">
+                            <input name="img" hidden id="getImgSrc">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><input type="button" id="sub" value="新增" onclick="addHero()"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+
+    <script>
+        //添加
+        function addHero() {
+            const myform = $('#myform').serialize();
+            $.post('http://127.0.0.1:3001/addHero', myform, (res) => {
+                if (res.code === 200) {
+                    window.location.href = './index.html'
+                }
+            })
+        }
+
+
+        //上传头像
+        function uploadImg() {
+            const file = $('#img')[0].files[0];
+            const formData = new FormData();
+            formData.append('avatar', file)
+            $.post({
+                url: 'http://127.0.0.1:3001/uploadFile',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: (res) => {
+                    if (res.code === 0) {
+                        const path = 'http://127.0.0.1:3001/' + res.src;
+                        $('#photo').prop('src', path);
+                        $('#getImgSrc').val(path);
+                    }
+                },
+                dataType: 'json'
+            })
+        }
+    </script>
+</body>
+
+</html>
